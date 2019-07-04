@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <home-header></home-header>
+    <home-header :seller="seller"></home-header>
     <div class="tab border-bottom">
       <router-link to="/goods" class="tab-item">商品</router-link>
       <router-link to="/ratings" class="tab-item">评价</router-link>
@@ -13,7 +13,10 @@
 </template>
 
 <script>
+import axios from 'axios'
 import HomeHeader from '@/components/header/Header'
+
+const ERR_OK = 0
 
 export default {
   name: 'App',
@@ -28,8 +31,14 @@ export default {
   methods: {
 
   },
-  mounted () {
-
+  created () {
+    axios.get('/api/seller').then(res => {
+      res = res.data
+      if (res.errno === ERR_OK && res.data) {
+        this.seller = res.data
+        console.log(this.seller)
+      }
+    })
   }
 }
 </script>
