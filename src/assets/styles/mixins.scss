@@ -1,0 +1,12 @@
+@mixin bg-img($url,$width,$height) {
+  background: url("images/#{$url}@2x.png") no-repeat center / $width $height;
+  @media (min-device-pixel-ratio: 3),(-webkit-min-device-pixel-ratio: 3) {
+    background: url("images/#{$url}@3x.png") no-repeat center / $width $height;
+  }
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
