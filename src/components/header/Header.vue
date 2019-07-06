@@ -39,6 +39,31 @@
             <div class="star-wrapper">
               <common-star :score="seller.score" :size="48"></common-star>
             </div>
+            <div class="detail-support">
+              <div class="support-header">
+                <div class="line"></div>
+                <div class="text">优惠信息</div>
+                <div class="line"></div>
+              </div>
+              <div class="support-content">
+                <ul>
+                  <li v-for="(item, index) of seller.supports" :key="index" class="support-item">
+                    <span class="icon" :class="typeList[item.type]"></span>
+                    <span class="text">{{item.description}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="detail-anno">
+              <div class="anno-header">
+                <div class="line"></div>
+                <div class="text">商家公告</div>
+                <div class="line"></div>
+              </div>
+              <div class="anno-content">
+                {{seller.bulletin}}
+              </div>
+            </div>
           </div>
         </div>
         <div class="detail-close" @click="handleDetailCancel">
@@ -247,6 +272,84 @@ export default {
             margin: 16px 0 28px 0;
             text-align: center;
           }
+          .detail-support {
+            width: 80%;
+            margin: 0 auto;
+            .support-header {
+              display: flex;
+              .line {
+                flex: 1;
+                border-bottom: 1px solid rgba(255,255,255,.4);
+                position: relative;
+                top: -6px;
+              }
+              .text {
+                padding: 0 12px;
+                font-size: 14px;
+                font-weight: 700;
+              }
+            }
+            .support-content {
+              margin: 24px 12px 28px 12px;
+              .support-item {
+                margin-bottom: 12px;
+                .icon {
+                  display: inline-block;
+                  vertical-align: top;
+                  width: 16px;
+                  height: 16px;
+                  &.decrease {
+                    @include bg-img('decrease_2',16px,16px)
+                  }
+                  &.discount {
+                    @include bg-img('discount_2',16px,16px)
+                  }
+                  &.guarantee {
+                    @include bg-img('guarantee_2',16px,16px)
+                  }
+                  &.invoice {
+                    @include bg-img('invoice_2',16px,16px)
+                  }
+                  &.special {
+                    @include bg-img('special_2',16px,16px)
+                  }
+                }
+                .text {
+                  display: inline-block;
+                  width: 88%;
+                  margin-left: 6px;
+                  font-size: 12px;
+                  font-weight: 200;
+                  line-height: 16px;
+                  @include ellipsis;
+                }
+              }
+            }
+          }
+          .detail-anno {
+            width: 80%;
+            margin: 0 auto;
+            .anno-header {
+              display: flex;
+              .line {
+                flex: 1;
+                border-bottom: 1px solid rgba(255,255,255,.4);
+                position: relative;
+                top: -6px;
+              }
+              .text {
+                padding: 0 12px;
+                font-size: 14px;
+                font-weight: 700;
+              }
+            }
+            .anno-content {
+              margin: 24px 12px 0 12px;
+              font-size: 12px;
+              font-weight: 200;
+              line-height: 24px;
+            }
+          }
         }
       }
       .detail-close {
@@ -257,7 +360,7 @@ export default {
         clear: both;
         .iconfont {
           font-size: 36px;
-          color: #fff;
+          color: rgba(255,255,255,.5);
           z-index: 9;
         }
       }

@@ -9,9 +9,9 @@
 
 <script>
 const length = 5
-const class_on = 'on'
-const class_half = 'half'
-const class_off = 'off'
+const classOn = 'on'
+const classHalf = 'half'
+const classOff = 'off'
 
 export default {
   name: 'CommonStar',
@@ -24,19 +24,18 @@ export default {
       return 'star-' + this.size
     },
     itemClasses () {
-
       let result = []
       let score = Math.floor((this.score > 5 ? 5 : this.score) * 2) / 2
       let hasDecimal = (score % 1 !== 0)
       let integer = Math.floor(score)
       for (let i = 0; i < integer; i++) {
-        result.push(class_on)
+        result.push(classOn)
       }
       if (hasDecimal) {
-        result.push(class_half)
+        result.push(classHalf)
       }
-      while (result.length < 5) {
-        result.push(class_off)
+      while (result.length < length) {
+        result.push(classOff)
       }
       return result
     }
