@@ -36,7 +36,6 @@ export default {
       res = res.data
       if (res.errno === ERR_OK && res.data) {
         this.seller = res.data
-        console.log(this.seller)
       }
     })
   }
