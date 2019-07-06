@@ -37,7 +37,7 @@
           <div class="detail-main">
             <h1 class="detail-title">{{seller.name}}</h1>
             <div class="star-wrapper">
-              <common-star></common-star>
+              <common-star :score="seller.score" :size="48"></common-star>
             </div>
           </div>
         </div>
@@ -244,7 +244,8 @@ export default {
             font-weight: 700;
           }
           .star-wrapper {
-            margin: 16px auto 28px auto;
+            margin: 16px 0 28px 0;
+            text-align: center;
           }
         }
       }
