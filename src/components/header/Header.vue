@@ -70,6 +70,7 @@
           <div class="detail-close" @click="handleDetailCancel">
             <span class="iconfont">&#xe7fc;</span>
           </div>
+          <div class="footer-space"></div>
         </div>
       </div>
     </fade-animate>
@@ -367,6 +368,9 @@ export default {
           color: rgba(255,255,255,.5);
           z-index: 9;
         }
+      }
+      .footer-space {
+        height: 28px;
       }
     }
   }
