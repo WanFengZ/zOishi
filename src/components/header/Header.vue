@@ -31,56 +31,60 @@
     <div class="background">
       <img :src="seller.avatar" alt="">
     </div>
-    <div v-if="showDetail" class="anno-detail">
-      <div>
-        <div class="detail-wrapper clearfix">
-          <div class="detail-main">
-            <h1 class="detail-title">{{seller.name}}</h1>
-            <div class="star-wrapper">
-              <common-star :score="seller.score" :size="48"></common-star>
-            </div>
-            <div class="detail-support">
-              <div class="support-header">
-                <div class="line"></div>
-                <div class="text">优惠信息</div>
-                <div class="line"></div>
+    <fade-animate>
+      <div v-if="showDetail" class="anno-detail">
+        <div>
+          <div class="detail-wrapper clearfix">
+            <div class="detail-main">
+              <h1 class="detail-title">{{seller.name}}</h1>
+              <div class="star-wrapper">
+                <common-star :score="seller.score" :size="48"></common-star>
               </div>
-              <div class="support-content">
-                <ul>
-                  <li v-for="(item, index) of seller.supports" :key="index" class="support-item">
-                    <span class="icon" :class="typeList[item.type]"></span>
-                    <span class="text">{{item.description}}</span>
-                  </li>
-                </ul>
+              <div class="detail-support">
+                <div class="support-header">
+                  <div class="line"></div>
+                  <div class="text">优惠信息</div>
+                  <div class="line"></div>
+                </div>
+                <div class="support-content">
+                  <ul>
+                    <li v-for="(item, index) of seller.supports" :key="index" class="support-item">
+                      <span class="icon" :class="typeList[item.type]"></span>
+                      <span class="text">{{item.description}}</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </div>
-            <div class="detail-anno">
-              <div class="anno-header">
-                <div class="line"></div>
-                <div class="text">商家公告</div>
-                <div class="line"></div>
-              </div>
-              <div class="anno-content">
-                {{seller.bulletin}}
+              <div class="detail-anno">
+                <div class="anno-header">
+                  <div class="line"></div>
+                  <div class="text">商家公告</div>
+                  <div class="line"></div>
+                </div>
+                <div class="anno-content">
+                  {{seller.bulletin}}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="detail-close" @click="handleDetailCancel">
-          <span class="iconfont">&#xe7fc;</span>
+          <div class="detail-close" @click="handleDetailCancel">
+            <span class="iconfont">&#xe7fc;</span>
+          </div>
         </div>
       </div>
-    </div>
+    </fade-animate>
   </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
 import CommonStar from '@/components/common/star/Star'
+import FadeAnimate from '@/components/common/fadeAnimate/fadeAnimate'
 export default {
   name: 'HomeHeader',
   components: {
-    CommonStar
+    CommonStar,
+    FadeAnimate
   },
   props: {
     seller: Object
