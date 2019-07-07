@@ -1,9 +1,9 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menu">
       <ul>
         <li v-for="(item, index) of goods" :key="index" class="menu-item">
-          <div class="item-wrapper border-bottom">
+          <div class="item-wrapper" :class="{'border-bottom': (index < goods.length-1)}">
             <div class="text">
               <span v-if="item.type > 0" class="icon" :class="typeList[item.type]"></span>
               {{item.name}}
@@ -12,12 +12,12 @@
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper">
+    <div class="foods-wrapper" ref="foods">
       <ul>
         <li v-for="(item, index) of goods" class="food-list" :key="index">
-          <h2>{{item.name}}</h2>
+          <h2 class="food-title">{{item.name}}</h2>
           <ul>
-            <li v-for="(food, index) of item.foods" class="food-item" :key="index">
+            <li v-for="(food, index) of item.foods" class="food-item" :class="{'border-bottom': (index < item.foods.length-1)}" :key="index">
               <div class="icon">
                 <img :src="food.icon" alt="">
               </div>
@@ -29,10 +29,9 @@
                   <span>好评率{{food.rating}}%</span>
                 </div>
                 <div class="price">
-                  <span>￥{{food.price}}</span>
-                  <span v-if="food.oldPrice">￥{{food.oldPrice}}</span>
+                  <span class="new">￥{{food.price}}</span>
+                  <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
-
               </div>
             </li>
           </ul>
@@ -44,6 +43,7 @@
 
 <script>
 import axios from 'axios'
+import BScroll from 'better-scroll'
 const ERR_OK = 0
 export default {
   name: 'HomeGoods',
@@ -53,7 +53,23 @@ export default {
   data () {
     return {
       goods: [],
-      typeList: ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+      typeList: ['decrease', 'discount', 'special', 'invoice', 'guarantee'],
+      scrollY: 0,
+      heightList: []
+    }
+  },
+  methods: {
+    calculateHeightList () {
+      let foodLists = document.getElementsByClassName('food-list')
+      console.log(foodLists)
+      let height = 0
+      this.heightList.push(height)
+      for (let i = 0; i < foodLists.length; i++) {
+        console.log('hah')
+        height += foodLists[i].clientHeight
+        this.heightList.push(height)
+      }
+      console.log(this.heightList)
     }
   },
   created () {
@@ -62,6 +78,23 @@ export default {
       if (res.errno === ERR_OK && res.data) {
         this.goods = res.data
       }
+    })
+  },
+  mounted () {
+    this.menuScroll = new BScroll(this.$refs.menu, {
+      click: true
+    })
+
+    this.foodsScroll = new BScroll(this.$refs.foods, {
+      probeType: 3
+    })
+
+    this.$nextTick(function () {
+      this.calculateHeightList()
+    })
+
+    this.foodsScroll.on('scroll', (position) => {
+      this.scrollY = Math.abs(position.y)
     })
   }
 }
@@ -119,7 +152,63 @@ export default {
       }
     }
     .foods-wrapper {
-
+      .food-list {
+        .food-title {
+          display: block;
+          height: 26px;
+          border-left: 2px solid #d9dde1;
+          background-color: #f3f5f7;
+          padding-left: 14px;
+          font-size: 12px;
+          line-height: 26px;
+          color: rgb(147,153,159);
+        }
+        .food-item {
+          display: flex;
+          margin: 0 18px;
+          padding: 18px 0;
+          .icon {
+            flex: 0 0 57px;
+            width: 57px;
+            margin-right: 10px;
+            img {
+              width: 100%;
+            }
+          }
+          .content {
+            flex: 1;
+            .name {
+              margin-top: 2px;
+              font-size: 14px;
+              color: rgb(7,17,27);
+              line-height: 14px;
+            }
+            .desc, .sell-info{
+              margin-top: 8px;
+              font-size: 10px;
+              color: rgb(147,153,159);
+              line-height: 12px;
+              span:first-child {
+                margin-right: 12px;
+              }
+            }
+            .price {
+              margin-top: 4px;
+              font-weight: 700;
+              line-height: 24px;
+              .new {
+                font-size: 14px;
+                color: rgb(240,20,20);
+              }
+              .old {
+                font-size: 10px;
+                color: rgb(147,153,159);
+                vertical-align: top;
+              }
+            }
+          }
+        }
+      }
     }
   }
 </style>
