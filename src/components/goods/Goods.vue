@@ -38,15 +38,20 @@
         </li>
       </ul>
     </div>
+    <shop-cart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shop-cart>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import BScroll from 'better-scroll'
+import ShopCart from '@/components/common/shopCart/shopCart'
 const ERR_OK = 0
 export default {
   name: 'HomeGoods',
+  components: {
+    ShopCart
+  },
   props: {
     seller: Object
   },
