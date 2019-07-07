@@ -3,7 +3,7 @@
     <div class="menu-wrapper" ref="menu">
       <ul>
         <li v-for="(item, index) of goods" :key="index" class="menu-item" :class="{active: (index === currentIndex)}" @click="handleMenuClick(index)">
-          <div class="item-wrapper" :class="{'border-bottom': (index < goods.length-1)}">
+          <div class="item-wrapper" :class="{'border-bottom': (index < goods.length-1 && index !== currentIndex && (index + 1) !== currentIndex)}">
             <div class="text">
               <span v-if="item.type > 0" class="icon" :class="typeList[item.type]"></span>
               {{item.name}}
@@ -205,7 +205,7 @@ export default {
               line-height: 14px;
             }
             .desc, .sell-info{
-              margin-top: 8px;
+              margin-top: 6px;
               font-size: 10px;
               color: rgb(147,153,159);
               line-height: 12px;
