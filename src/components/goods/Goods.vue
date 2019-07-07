@@ -2,7 +2,7 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menu">
       <ul>
-        <li v-for="(item, index) of goods" :key="index" class="menu-item">
+        <li v-for="(item, index) of goods" :key="index" class="menu-item" :class="{active: (index === currentIndex)}" @click="handleMenuClick(index)">
           <div class="item-wrapper" :class="{'border-bottom': (index < goods.length-1)}">
             <div class="text">
               <span v-if="item.type > 0" class="icon" :class="typeList[item.type]"></span>
@@ -58,18 +58,36 @@ export default {
       heightList: []
     }
   },
+  watch: {
+    goods () {
+      this.$nextTick(() => {
+        this.calculateHeightList()
+      })
+    }
+  },
+  computed: {
+    currentIndex () {
+      for (let i = 0; i < this.heightList.length; i++) {
+        if (!this.heightList[i + 1] || (this.scrollY >= this.heightList[i] && this.scrollY < this.heightList[i + 1])) {
+          return i
+        }
+      }
+      return 0
+    }
+  },
   methods: {
     calculateHeightList () {
-      let foodLists = document.getElementsByClassName('food-list')
-      console.log(foodLists)
+      let foodLists = this.$refs.foods.children[0].children
       let height = 0
       this.heightList.push(height)
       for (let i = 0; i < foodLists.length; i++) {
-        console.log('hah')
         height += foodLists[i].clientHeight
         this.heightList.push(height)
       }
-      console.log(this.heightList)
+    },
+    handleMenuClick (index) {
+      let target = this.$refs.foods.children[0].children[index]
+      this.foodsScroll.scrollToElement(target)
     }
   },
   created () {
@@ -89,9 +107,9 @@ export default {
       probeType: 3
     })
 
-    this.$nextTick(function () {
-      this.calculateHeightList()
-    })
+    // setTimeout(() => {
+    //   this.calculateHeightList()
+    // }, 500)
 
     this.foodsScroll.on('scroll', (position) => {
       this.scrollY = Math.abs(position.y)
@@ -113,6 +131,9 @@ export default {
       flex: 0 0 80px;
       background-color: #f3f5f7;
       .menu-item {
+        &.active {
+          background-color: #fff;
+        }
         .item-wrapper {
           display: table;
           width: 54px;

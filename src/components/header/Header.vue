@@ -101,13 +101,13 @@ export default {
       if (!newValue) {
         this.scroll = null
       } else {
-        setTimeout(() => {
+        this.$nextTick(() => {
           this.scroll = new BScroll(document.querySelector('.anno-detail'), {
             scrollY: true,
             scrollX: false,
             click: true
           })
-        }, 100)
+        })
       }
     }
   },
