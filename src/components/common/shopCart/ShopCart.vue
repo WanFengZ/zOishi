@@ -12,8 +12,13 @@
       <div class="content-right" :class="{enough: totalPrice >= minPrice}">{{payDesc}}</div>
     </div>
     <div class="ball-container">
-      <transition name="drop"></transition>
-      <div v-for="(ball, index) of balls" v-show="ball.show" class="ball" :key="index"></div>
+      <div v-for="(ball, index) in balls" :key="index">
+        <transition @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
+          <div class="ball" v-show="ball.show" >
+            <div class="inner inner-hook"></div>
+          </div>
+        </transition>
+      </div>
     </div>
   </div>
 </template>
@@ -64,7 +69,8 @@ export default {
         {
           show: false
         }
-      ]
+      ],
+      dropBalls: []
     }
   },
   computed: {
@@ -103,10 +109,36 @@ export default {
           return
         }
       }
+    },
+    beforeDrop (el) {
+      const ball = this.dropBalls[this.dropBalls.length - 1]
+      const rect = ball.el.getBoundingClientRect()
+      const x = rect.left - 32
+      const y = -(window.innerHeight - rect.top - 22)
+      el.style.display = ''
+      el.style.webkitTransform = `translate3d(0,${y}px,0)`
+      el.style.transform = `translate3d(0,${y}px,0)`
+      let inner = el.getElementsByClassName('inner-hook')[0]
+      inner.style.webkitTransform = `translate3d(${x}px,0,0)`
+      inner.style.transform = `translate3d(${x}px,0,0)`
+    },
+    dropping (el, done) {
+      let inner = el.getElementsByClassName('inner-hook')[0]
+      this.$nextTick(() => {
+        el.style.webkitTransform = 'translate3d(0,0,0)'
+        el.style.transform = 'translate3d(0,0,0)'
+        inner.style.webkitTransform = 'translate3d(0,0,0)'
+        inner.style.transform = 'translate3d(0,0,0)'
+      })
+      el.addEventListener('transitionend', done)
+    },
+    afterDrop (el) {
+      const ball = this.dropBalls.shift()
+      if (ball) {
+        ball.show = false
+        el.style.display = 'none'
+      }
     }
-  },
-  created () {
-    this.dropBalls = []
   }
 }
 </script>
@@ -201,6 +233,21 @@ export default {
         &.enough {
           background-color: #00b43c;
           color: #f3f5f7;
+        }
+      }
+    }
+    .ball-container {
+      .ball {
+        position: fixed;
+        left: 32px;
+        bottom: 22px;
+        transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41);
+        .inner {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: rgb(0, 160, 220);
+          transition: all 0.4s linear;
         }
       }
     }
