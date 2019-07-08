@@ -10,6 +10,7 @@
             </div>
           </div>
         </li>
+        <li class="menu-footer"></li>
       </ul>
     </div>
     <div class="foods-wrapper" ref="foods">
@@ -32,25 +33,30 @@
                   <span class="new">￥{{food.price}}</span>
                   <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="cart-control">
+                  <cart-control :food="food" @add="onAdd"></cart-control>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shop-cart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shop-cart>
+    <shop-cart ref="shopCart" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectFoods="selectFoods"></shop-cart>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import BScroll from 'better-scroll'
-import ShopCart from '@/components/common/shopCart/shopCart'
+import ShopCart from '@/components/common/shopCart/ShopCart'
+import CartControl from '@/components/common/cartControl/CartControl'
 const ERR_OK = 0
 export default {
   name: 'HomeGoods',
   components: {
-    ShopCart
+    ShopCart,
+    CartControl
   },
   props: {
     seller: Object
@@ -78,6 +84,17 @@ export default {
         }
       }
       return 0
+    },
+    selectFoods () {
+      let foods = []
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count && food.count > 0) {
+            foods.push(food)
+          }
+        })
+      })
+      return foods
     }
   },
   methods: {
@@ -93,6 +110,9 @@ export default {
     handleMenuClick (index) {
       let target = this.$refs.foods.children[0].children[index]
       this.foodsScroll.scrollToElement(target)
+    },
+    onAdd (el) {
+      this.$refs.shopCart.drop(el)
     }
   },
   created () {
@@ -109,7 +129,8 @@ export default {
     })
 
     this.foodsScroll = new BScroll(this.$refs.foods, {
-      probeType: 3
+      probeType: 3,
+      click: true
     })
 
     // setTimeout(() => {
@@ -176,6 +197,10 @@ export default {
           }
         }
       }
+      .menu-footer {
+        width: 100%;
+        height: 30px;
+      }
     }
     .foods-wrapper {
       .food-list {
@@ -203,6 +228,7 @@ export default {
           }
           .content {
             flex: 1;
+            position: relative;
             .name {
               margin-top: 2px;
               font-size: 14px;
@@ -231,6 +257,12 @@ export default {
                 color: rgb(147,153,159);
                 vertical-align: top;
               }
+            }
+            .cart-control {
+              position: absolute;
+              right: 0px;
+              bottom: -6px;
+              width: 150px;
             }
           }
         }
