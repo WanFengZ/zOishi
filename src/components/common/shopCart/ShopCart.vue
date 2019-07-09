@@ -1,7 +1,7 @@
 <template>
   <div class="shop-cart">
     <div class="content">
-      <div class="content-left">
+      <div class="content-left" @click="toggleList">
         <div class="logo-wrapper">
           <span class="iconfont" :class="{active: totalCount > 0}">&#xe61a;</span>
           <div class="count" v-show="totalCount > 0">{{totalCount}}</div>
@@ -20,12 +20,39 @@
         </transition>
       </div>
     </div>
+    <div class="cart-list" v-show="showList">
+      <div class="list-header border-bottom">
+        <h3 class="title">购物车</h3>
+        <span class="empty">清空</span>
+      </div>
+      <div class="list-content">
+        <ul>
+          <li v-for="(food, index) of selectFoods" :key="index" class="list-item border-bottom">
+            <div class="name">{{food.name}}</div>
+            <div class="price-wrapper">
+              <div class="price">
+                <span>￥</span>
+                {{food.price * food.count}}
+              </div>
+              <div class="cartcontrol-wrapper">
+                <cart-control :food="food" @add="drop"></cart-control>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import BScroll from 'better-scroll'
+import CartControl from '@/components/common/cartControl/CartControl'
 export default {
   name: 'commonShopCart',
+  components: {
+    CartControl
+  },
   props: {
     deliveryPrice: {
       type: Number,
@@ -68,9 +95,33 @@ export default {
         },
         {
           show: false
+        },
+        {
+          show: false
+        },
+        {
+          show: false
+        },
+        {
+          show: false
+        },
+        {
+          show: false
         }
       ],
-      dropBalls: []
+      dropBalls: [],
+      showList: false
+    }
+  },
+  watch: {
+    showList () {
+      this.$nextTick(() => {
+        if (!this.scroll) {
+          this.scroll = new BScroll(document.querySelector('.list-content'))
+        } else {
+          this.scroll.refresh()
+        }
+      })
     }
   },
   computed: {
@@ -113,8 +164,8 @@ export default {
     beforeDrop (el) {
       const ball = this.dropBalls[this.dropBalls.length - 1]
       const rect = ball.el.getBoundingClientRect()
-      const x = rect.left - 32
-      const y = -(window.innerHeight - rect.top - 22)
+      const x = rect.left - 32 + 10
+      const y = -(window.innerHeight - rect.top - 22 - 10)
       el.style.display = ''
       el.style.webkitTransform = `translate3d(0,${y}px,0)`
       el.style.transform = `translate3d(0,${y}px,0)`
@@ -125,19 +176,28 @@ export default {
     dropping (el, done) {
       let inner = el.getElementsByClassName('inner-hook')[0]
       this.$nextTick(() => {
-        el.style.webkitTransform = 'translate3d(0,0,0)'
-        el.style.transform = 'translate3d(0,0,0)'
-        inner.style.webkitTransform = 'translate3d(0,0,0)'
-        inner.style.transform = 'translate3d(0,0,0)'
+        setTimeout(() => {
+          el.style.webkitTransform = 'translate3d(0,0,0)'
+          el.style.transform = 'translate3d(0,0,0)'
+          inner.style.webkitTransform = 'translate3d(0,0,0)'
+          inner.style.transform = 'translate3d(0,0,0)'
+        }, 50)
       })
       el.addEventListener('transitionend', done)
     },
     afterDrop (el) {
+      console.log('end')
       const ball = this.dropBalls.shift()
       if (ball) {
         ball.show = false
         el.style.display = 'none'
       }
+    },
+    toggleList () {
+      if (!this.totalCount) {
+        return
+      }
+      this.showList = !this.showList
     }
   }
 }
@@ -151,11 +211,11 @@ export default {
     width: 100%;
     height: 46px;
     color: rgba(255,255,255,.4);
-    background-color: #141d27;
     .content {
       width: 100%;
       height: 100%;
       display: flex;
+      background-color: #141d27;
       .content-left {
         flex: 1;
         font-size: 0;
@@ -248,6 +308,70 @@ export default {
           border-radius: 50%;
           background: rgb(0, 160, 220);
           transition: all 0.4s linear;
+        }
+      }
+    }
+    .cart-list {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      padding-bottom: 60px;
+      background-color: #fff;
+      z-index: -1;
+      .list-header {
+        padding: 0 18px;
+        height: 40px;
+        background-color: #f3f5f7;
+        line-height: 40px;
+        .title {
+          float: left;
+          color: rgb(7,27,17);
+          font-size: 14px;
+          font-weight: 200;
+        }
+        .empty {
+          float: right;
+          font-size: 12px;
+          color: rgb(0,160,200);
+        }
+      }
+      .list-content {
+        max-height: 205px;
+        overflow: hidden;
+        .list-item {
+          height: 58px;
+          margin: 0 18px;
+          display: flex;
+          .name {
+            flex: 1;
+            line-height: 58px;
+            color: rgb(7,17,27);
+            font-size: 14px;
+            font-weight: 200;
+          }
+          .price-wrapper {
+            line-height: 58px;
+            font-size: 0;
+            .price {
+              display: inline-block;
+              vertical-align: middle;
+              font-size: 14px;
+              color: rgb(240,20,20);
+              margin-left: 18px;
+              span {
+                font-size: 10px;
+                vertical-align: bottom;
+                margin-right: -4px;
+              }
+            }
+            .cartcontrol-wrapper {
+              display: inline-block;
+              vertical-align: bottom;
+              height: 58px;
+              width: 110px;
+            }
+          }
         }
       }
     }

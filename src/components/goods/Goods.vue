@@ -112,7 +112,9 @@ export default {
       this.foodsScroll.scrollToElement(target)
     },
     onAdd (el) {
-      this.$refs.shopCart.drop(el)
+      this.$nextTick(() => {
+        this.$refs.shopCart.drop(el)
+      })
     }
   },
   created () {
@@ -132,10 +134,6 @@ export default {
       probeType: 3,
       click: true
     })
-
-    // setTimeout(() => {
-    //   this.calculateHeightList()
-    // }, 500)
 
     this.foodsScroll.on('scroll', (position) => {
       this.scrollY = Math.abs(position.y)
