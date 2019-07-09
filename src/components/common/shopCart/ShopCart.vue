@@ -20,38 +20,42 @@
         </transition>
       </div>
     </div>
-    <div class="cart-list" v-show="showList">
-      <div class="list-header border-bottom">
-        <h3 class="title">购物车</h3>
-        <span class="empty">清空</span>
-      </div>
-      <div class="list-content">
-        <ul>
-          <li v-for="(food, index) of selectFoods" :key="index" class="list-item border-bottom">
-            <div class="name">{{food.name}}</div>
-            <div class="price-wrapper">
-              <div class="price">
-                <span>￥</span>
-                {{food.price * food.count}}
+    <bounce-animate>
+      <div class="cart-list" v-show="showList">
+        <div class="list-header border-bottom">
+          <h3 class="title">购物车</h3>
+          <span class="empty">清空</span>
+        </div>
+        <div class="list-content">
+          <ul>
+            <li v-for="(food, index) of selectFoods" :key="index" class="list-item border-bottom">
+              <div class="name">{{food.name}}</div>
+              <div class="price-wrapper">
+                <div class="price">
+                  <span>￥</span>
+                  {{food.price * food.count}}
+                </div>
+                <div class="cartcontrol-wrapper">
+                  <cart-control :food="food" @add="drop"></cart-control>
+                </div>
               </div>
-              <div class="cartcontrol-wrapper">
-                <cart-control :food="food" @add="drop"></cart-control>
-              </div>
-            </div>
-          </li>
-        </ul>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </bounce-animate>
   </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
 import CartControl from '@/components/common/cartControl/CartControl'
+import BounceAnimate from '@/components/common/bounceAnimate/BounceAnimate'
 export default {
   name: 'commonShopCart',
   components: {
-    CartControl
+    CartControl,
+    BounceAnimate
   },
   props: {
     deliveryPrice: {
