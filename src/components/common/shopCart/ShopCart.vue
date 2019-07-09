@@ -128,6 +128,11 @@ export default {
           this.scroll.refresh()
         }
       })
+    },
+    totalCount (newValue) {
+      if (newValue === 0) {
+        this.showList = false
+      }
     }
   },
   computed: {
@@ -209,7 +214,6 @@ export default {
       this.selectFoods.forEach((food) => {
         food.count = 0
       })
-      this.showList = false
     }
   }
 }
