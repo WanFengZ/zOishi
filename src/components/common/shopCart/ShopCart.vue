@@ -24,7 +24,7 @@
       <div class="cart-list" v-show="showList">
         <div class="list-header border-bottom">
           <h3 class="title">购物车</h3>
-          <span class="empty">清空</span>
+          <span class="empty" @click="emptySelect">清空</span>
         </div>
         <div class="list-content">
           <ul>
@@ -121,7 +121,9 @@ export default {
     showList () {
       this.$nextTick(() => {
         if (!this.scroll) {
-          this.scroll = new BScroll(document.querySelector('.list-content'))
+          this.scroll = new BScroll(document.querySelector('.list-content'), {
+            click: true
+          })
         } else {
           this.scroll.refresh()
         }
@@ -202,6 +204,12 @@ export default {
         return
       }
       this.showList = !this.showList
+    },
+    emptySelect () {
+      this.selectFoods.forEach((food) => {
+        food.count = 0
+      })
+      this.showList = false
     }
   }
 }
