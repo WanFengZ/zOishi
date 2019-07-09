@@ -6,15 +6,15 @@
 
 <script>
 export default {
-  name: 'FadeAnimate'
+  name: 'BounceAnimate'
 }
 </script>
 
 <style lang="scss" scoped>
   .v-enter, .v-leave-to {
-    opacity: 0;
+    transform: translateX(100%);
   }
   .v-enter-active, .v-leave-active {
-    transition: opacity .4s;
+    transition: transform .4s ease-out;
   }
 </style>

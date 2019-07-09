@@ -19,10 +19,10 @@
           <h2 class="food-title">{{item.name}}</h2>
           <ul>
             <li v-for="(food, index) of item.foods" class="food-item" :class="{'border-bottom': (index < item.foods.length-1)}" :key="index">
-              <div class="icon">
+              <div class="icon" @click="enterFood(food)">
                 <img :src="food.icon" alt="">
               </div>
-              <div class="content">
+              <div class="content" @click="enterFood(food)">
                 <h3 class="name">{{food.name}}</h3>
                 <p class="desc">{{food.description}}</p>
                 <div class="sell-info">
@@ -30,12 +30,12 @@
                   <span>好评率{{food.rating}}%</span>
                 </div>
                 <div class="price">
-                  <span class="new">￥{{food.price}}</span>
+                  <span class="new"><span>￥</span>{{food.price}}</span>
                   <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
-                <div class="cart-control">
-                  <cart-control :food="food" @add="onAdd"></cart-control>
-                </div>
+              </div>
+              <div class="cartcontrol-wrapper">
+                <cart-control :food="food" @add="onAdd"></cart-control>
               </div>
             </li>
           </ul>
@@ -43,6 +43,9 @@
       </ul>
     </div>
     <shop-cart ref="shopCart" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectFoods="selectFoods"></shop-cart>
+    <slide-animate>
+      <food :food="detailFood" v-show="showFood" @cancelFood="cancelFood" @onAdd="onAdd"></food>
+    </slide-animate>
   </div>
 </template>
 
@@ -51,12 +54,16 @@ import axios from 'axios'
 import BScroll from 'better-scroll'
 import ShopCart from '@/components/common/shopCart/ShopCart'
 import CartControl from '@/components/common/cartControl/CartControl'
+import Food from '@/components/food/Food'
+import SlideAnimate from '@/components/common/slideAnimate/SlideAnimate'
 const ERR_OK = 0
 export default {
   name: 'HomeGoods',
   components: {
     ShopCart,
-    CartControl
+    CartControl,
+    Food,
+    SlideAnimate
   },
   props: {
     seller: Object
@@ -66,7 +73,9 @@ export default {
       goods: [],
       typeList: ['decrease', 'discount', 'special', 'invoice', 'guarantee'],
       scrollY: 0,
-      heightList: []
+      heightList: [],
+      showFood: false,
+      detailFood: {}
     }
   },
   watch: {
@@ -115,6 +124,15 @@ export default {
       this.$nextTick(() => {
         this.$refs.shopCart.drop(el)
       })
+    },
+    enterFood (food) {
+      this.detailFood = food
+      this.$nextTick(() => {
+        this.showFood = true
+      })
+    },
+    cancelFood () {
+      this.showFood = false
     }
   },
   created () {
@@ -201,6 +219,7 @@ export default {
       }
     }
     .foods-wrapper {
+      flex: 1;
       .food-list {
         .food-title {
           display: block;
@@ -216,6 +235,7 @@ export default {
           display: flex;
           margin: 0 18px;
           padding: 18px 0;
+          position: relative;
           .icon {
             flex: 0 0 57px;
             width: 57px;
@@ -226,7 +246,6 @@ export default {
           }
           .content {
             flex: 1;
-            position: relative;
             .name {
               margin-top: 2px;
               font-size: 14px;
@@ -249,19 +268,24 @@ export default {
               .new {
                 font-size: 14px;
                 color: rgb(240,20,20);
+                span {
+                  font-size: 10px;
+                  vertical-align: baseline;
+                }
               }
               .old {
                 font-size: 10px;
                 color: rgb(147,153,159);
+                text-decoration: line-through;
                 vertical-align: top;
               }
             }
-            .cart-control {
-              position: absolute;
-              right: 0px;
-              bottom: -6px;
-              width: 150px;
-            }
+          }
+          .cartcontrol-wrapper {
+            position: absolute;
+            right: 0;
+            bottom: 4px;
+            width: 150px;
           }
         }
       }

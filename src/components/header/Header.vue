@@ -80,7 +80,7 @@
 <script>
 import BScroll from 'better-scroll'
 import CommonStar from '@/components/common/star/Star'
-import FadeAnimate from '@/components/common/fadeAnimate/fadeAnimate'
+import FadeAnimate from '@/components/common/fadeAnimate/FadeAnimate'
 export default {
   name: 'HomeHeader',
   components: {

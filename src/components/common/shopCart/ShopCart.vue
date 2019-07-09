@@ -197,7 +197,6 @@ export default {
       el.addEventListener('transitionend', done)
     },
     afterDrop (el) {
-      console.log('end')
       const ball = this.dropBalls.shift()
       if (ball) {
         ball.show = false
@@ -227,6 +226,7 @@ export default {
     width: 100%;
     height: 46px;
     color: rgba(255,255,255,.4);
+    z-index: 22;
     .content {
       width: 100%;
       height: 100%;
