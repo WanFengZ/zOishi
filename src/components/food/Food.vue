@@ -30,9 +30,11 @@
         <div class="title">商品介绍</div>
         <div class="text">{{food.info}}</div>
       </div>
-      <div class="food-ratings">
+      <div class="food-ratings border-topbottom">
         <div class="title">商品评价</div>
-        <div class="content"></div>
+        <div class="content">
+          <ratings :desc="ratingDesc" :ratings="food.ratings"></ratings>
+        </div>
       </div>
     </div>
   </div>
@@ -43,17 +45,29 @@ import Vue from 'vue'
 import BScroll from 'better-scroll'
 import CartControl from '@/components/common/cartControl/CartControl'
 import FadeAnimate from '@/components/common/fadeAnimate/FadeAnimate'
+import Ratings from '@/components/common/ratings/Ratings'
+
 export default {
   name: 'Food',
   components: {
     CartControl,
-    FadeAnimate
+    FadeAnimate,
+    Ratings
   },
   props: {
     food: {
       type: Object,
       default () {
         return {}
+      }
+    }
+  },
+  data () {
+    return {
+      ratingDesc: {
+        all: '全部',
+        positive: '推荐',
+        negative: '吐槽'
       }
     }
   },
@@ -158,20 +172,20 @@ export default {
             box-sizing: border-box;
             position: absolute;
             right: 24px;
-            bottom: 12px;
+            bottom: 18px;
             height: 24px;
             padding: 0 10px;
             border-radius: 12px;
             color: #fff;
             font-size: 12px;
-            line-height: 21px;
+            line-height: 24px;
             text-align: center;
             background-color: rgb(0,160,200);
           }
           .cartcontrol-wrapper {
             position: absolute;
             right: 18px;
-            bottom: 2px;
+            bottom: 8px;
             width: 150px;
           }
         }
@@ -194,8 +208,12 @@ export default {
       }
       .food-ratings {
         margin-top: 16px;
-        height: 100px;
         background-color: #fff;
+        .title {
+          padding: 18px 0 0 18px;
+          font-size: 14px;
+          color: rgb(7,17,27);
+        }
       }
     }
   }
