@@ -26,11 +26,14 @@
           </fade-animate>
         </div>
       </div>
-      <div class="food-desc">
-        <div class="title"></div>
-        <div class="text"></div>
+      <div class="food-info border-topbottom" v-show="food.info">
+        <div class="title">商品介绍</div>
+        <div class="text">{{food.info}}</div>
       </div>
-      <div class="food-ratings"></div>
+      <div class="food-ratings">
+        <div class="title">商品评价</div>
+        <div class="content"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -74,8 +77,9 @@ export default {
     add (el) {
       this.$emit('onAdd', el)
     },
-    handleBuy () {
+    handleBuy (e) {
       Vue.set(this.food, 'count', 1)
+      this.$emit('onAdd', e.target)
     }
   }
 
@@ -171,6 +175,27 @@ export default {
             width: 150px;
           }
         }
+      }
+      .food-info {
+        margin-top: 16px;
+        padding: 18px;
+        background-color: #fff;
+        .title {
+          font-size: 14px;
+          color: rgb(7,17,27);
+        }
+        .text {
+          padding: 6px 8px;
+          font-size: 12px;
+          font-weight: 200;
+          color: rgb(77,85,93);
+          line-height: 24px;
+        }
+      }
+      .food-ratings {
+        margin-top: 16px;
+        height: 100px;
+        background-color: #fff;
       }
     }
   }

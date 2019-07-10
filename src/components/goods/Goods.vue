@@ -127,9 +127,7 @@ export default {
     },
     enterFood (food) {
       this.detailFood = food
-      this.$nextTick(() => {
-        this.showFood = true
-      })
+      this.showFood = true
     },
     cancelFood () {
       this.showFood = false

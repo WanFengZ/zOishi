@@ -15,6 +15,6 @@ export default {
     transform: translateX(100%);
   }
   .v-enter-active, .v-leave-active {
-    transition: transform .4s ease-out;
+    transition: transform .4s;
   }
 </style>
