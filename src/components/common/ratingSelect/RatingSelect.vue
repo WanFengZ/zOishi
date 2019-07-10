@@ -11,24 +11,6 @@
         <span class="text">只看有内容的评价</span>
       </div>
     </div>
-    <div class="content">
-      <ul>
-        <li v-for="(rating, index) of currentRatings" :key="index" class="rating-item border-bottom">
-          <div class="time">{{getDate(rating.rateTime)}}</div>
-          <div class="item-content">
-            <span class="icon iconfont on" v-if="rating.rateType === 0">&#xe701;</span>
-            <span class="icon iconfont" v-else>&#xe86a;</span>
-            {{rating.text}}
-          </div>
-          <div class="user">
-            <span class="user-name">{{rating.username}}</span>
-            <div class="user-avatar">
-              <img :src="rating.avatar" alt="">
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 
@@ -102,17 +84,12 @@ export default {
       }
     }
   },
+  watch: {
+    currentRatings (newValue) {
+      this.$emit('update', newValue)
+    }
+  },
   methods: {
-    getDate (num) {
-      const date = new Date(num)
-      const y = date.getFullYear().toString().padStart(2, '0')
-      const m = date.getMonth().toString().padStart(2, '0')
-      const d = date.getDay().toString().padStart(2, '0')
-      const h = date.getHours().toString().padStart(2, '0')
-      const minute = date.getMinutes().toString().padStart(2, '0')
-      const s = date.getSeconds().toString().padStart(2, '0')
-      return `${y}-${m}-${d} ${h}:${minute}:${s}`
-    },
     selectClick (type) {
       this.selectType = type
     },
@@ -173,59 +150,6 @@ export default {
         .text {
           font-size: 12px;
           line-height: 24px;
-        }
-      }
-    }
-    .content {
-      padding: 0 18px;
-      .rating-item {
-        padding: 16px 0;
-        position: relative;
-        .time {
-          font-size: 10px;
-          color: rgb(147,153,159);
-          line-height: 12px;
-        }
-        .item-content {
-          margin-top: 6px;
-          font-size: 12px;
-          .icon {
-            color: rgb(147,153,159);
-            line-height: 24px;
-            &.on {
-              color: rgb(0,160,220);
-            }
-          }
-          .text {
-            color: rgb(7,17,27);
-            line-height: 16px;
-          }
-        }
-        .user {
-          position: absolute;
-          right: 0;
-          top: 16px;
-          font-size: 0;
-          .user-name {
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 6px;
-            font-size: 10px;
-            color: rgb(147,153,159);
-            line-height: 12px;
-          }
-          .user-avatar {
-            display: inline-block;
-            vertical-align: middle;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            overflow: hidden;
-            img {
-              width: 100%;
-              height: 100%;
-            }
-          }
         }
       }
     }

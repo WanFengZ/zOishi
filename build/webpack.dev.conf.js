@@ -68,7 +68,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           data: goods
         })
       })
-      app.get('/api/ratings', (req, res) => {
+      app.get('/api/ratingSelect', (req, res) => {
         res.json({
           errno: 0,
           data: ratings

@@ -32,11 +32,26 @@
       </div>
       <div class="food-ratings border-topbottom">
         <div class="title">商品评价</div>
-        <div class="content"  >
-          <ratings :desc="ratingDesc" :ratings="food.ratings"></ratings>
+        <rating-select :desc="ratingDesc" :ratings="food.ratings" @update="updateRatings"></rating-select>
+        <div class="content">
+          <ul>
+            <li v-for="(rating, index) of currentRatings" :key="index" class="rating-item border-bottom">
+              <div class="time">{{getDate(rating.rateTime)}}</div>
+              <div class="item-content">
+                <span class="icon iconfont on" v-if="rating.rateType === 0">&#xe701;</span>
+                <span class="icon iconfont" v-else>&#xe86a;</span>
+                {{rating.text}}
+              </div>
+              <div class="user">
+                <span class="user-name">{{rating.username}}</span>
+                <div class="user-avatar">
+                  <img :src="rating.avatar" alt="">
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
-      <div class="foot-space" ref="ratings"></div>
     </div>
   </div>
 </template>
@@ -46,14 +61,14 @@ import Vue from 'vue'
 import BScroll from 'better-scroll'
 import CartControl from '@/components/common/cartControl/CartControl'
 import FadeAnimate from '@/components/common/fadeAnimate/FadeAnimate'
-import Ratings from '@/components/common/ratings/Ratings'
+import RatingSelect from '@/components/common/ratingSelect/RatingSelect'
 
 export default {
   name: 'Food',
   components: {
     CartControl,
     FadeAnimate,
-    Ratings
+    RatingSelect
   },
   props: {
     food: {
@@ -69,7 +84,8 @@ export default {
         all: '全部',
         positive: '推荐',
         negative: '吐槽'
-      }
+      },
+      currentRatings: []
     }
   },
   watch: {
@@ -95,6 +111,19 @@ export default {
     handleBuy (e) {
       Vue.set(this.food, 'count', 1)
       this.$emit('onAdd', e.target)
+    },
+    updateRatings (value) {
+      this.currentRatings = value
+    },
+    getDate (num) {
+      const date = new Date(num)
+      const y = date.getFullYear().toString().padStart(2, '0')
+      const m = date.getMonth().toString().padStart(2, '0')
+      const d = date.getDay().toString().padStart(2, '0')
+      const h = date.getHours().toString().padStart(2, '0')
+      const minute = date.getMinutes().toString().padStart(2, '0')
+      const s = date.getSeconds().toString().padStart(2, '0')
+      return `${y}-${m}-${d} ${h}:${minute}:${s}`
     }
   }
 
@@ -210,14 +239,65 @@ export default {
       .food-ratings {
         margin-top: 16px;
         background-color: #fff;
+        min-height: 520px;
         .title {
           padding: 18px 0 0 18px;
           font-size: 14px;
           color: rgb(7,17,27);
         }
-      }
-      .foot-space {
-        height: 20px;
+        .content {
+          padding: 0 18px;
+          .rating-item {
+            padding: 16px 0;
+            position: relative;
+            .time {
+              font-size: 10px;
+              color: rgb(147,153,159);
+              line-height: 12px;
+            }
+            .item-content {
+              margin-top: 6px;
+              font-size: 12px;
+              .icon {
+                color: rgb(147,153,159);
+                line-height: 24px;
+                &.on {
+                  color: rgb(0,160,220);
+                }
+              }
+              .text {
+                color: rgb(7,17,27);
+                line-height: 16px;
+              }
+            }
+            .user {
+              position: absolute;
+              right: 0;
+              top: 16px;
+              font-size: 0;
+              .user-name {
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 6px;
+                font-size: 10px;
+                color: rgb(147,153,159);
+                line-height: 12px;
+              }
+              .user-avatar {
+                display: inline-block;
+                vertical-align: middle;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                overflow: hidden;
+                img {
+                  width: 100%;
+                  height: 100%;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
