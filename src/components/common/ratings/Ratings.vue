@@ -2,21 +2,21 @@
   <div class="ratings">
     <div class="header border-bottom">
       <div class="selects">
-        <div class="selectItem all">{{desc.all}}<span class="count">22</span></div>
-        <div class="selectItem positive">{{desc.positive}}<span class="count">22</span></div>
-        <div class="selectItem negative">{{desc.negative}}<span class="count">22</span></div>
+        <div class="selectItem all" :class="{active: selectType === 2}" @click="selectClick(2)">{{desc.all}}<span class="count">22</span></div>
+        <div class="selectItem positive" :class="{active: selectType === 0}" @click="selectClick(0)">{{desc.positive}}<span class="count">22</span></div>
+        <div class="selectItem negative" :class="{active: selectType === 1}" @click="selectClick(1)">{{desc.negative}}<span class="count">22</span></div>
       </div>
       <div class="switch border-top">
-        <span class="icon iconfont">&#xe77d;</span>
+        <span class="icon iconfont" :class="{active: onlyContent}" @click="onlyClick">&#xe77d;</span>
         <span class="text">只看有内容的评价</span>
       </div>
     </div>
     <div class="content">
       <ul>
-        <li v-for="(rating, index) of ratings" :key="index" class="rating-item border-bottom">
+        <li v-for="(rating, index) of currentRatings" :key="index" class="rating-item border-bottom">
           <div class="time">{{getDate(rating.rateTime)}}</div>
           <div class="item-content">
-            <span class="icon iconfont" v-if="rating.rateType === 0">&#xe701;</span>
+            <span class="icon iconfont on" v-if="rating.rateType === 0">&#xe701;</span>
             <span class="icon iconfont" v-else>&#xe86a;</span>
             {{rating.text}}
           </div>
@@ -50,6 +50,58 @@ export default {
       type: Array
     }
   },
+  data () {
+    return {
+      selectType: 2,
+      onlyContent: false
+    }
+  },
+  computed: {
+    contentRatings () {
+      return this.ratings.filter((rating) => {
+        return rating.text !== ''
+      })
+    },
+    positiveRatings () {
+      return this.ratings.filter((rating) => {
+        return rating.rateType === 0
+      })
+    },
+    negativeRatings () {
+      return this.ratings.filter((rating) => {
+        return rating.rateType === 1
+      })
+    },
+    currentRatings () {
+      if (this.onlyContent) {
+        if (this.selectType === 2) {
+          return this.ratings.filter((rating) => {
+            return rating.text !== ''
+          })
+        }
+        if (this.selectType === 0) {
+          return this.positiveRatings.filter((rating) => {
+            return rating.text !== ''
+          })
+        }
+        if (this.selectType === 1) {
+          return this.negativeRatings.filter((rating) => {
+            return rating.text !== ''
+          })
+        }
+      } else {
+        if (this.selectType === 2) {
+          return this.ratings
+        }
+        if (this.selectType === 0) {
+          return this.positiveRatings
+        }
+        if (this.selectType === 1) {
+          return this.negativeRatings
+        }
+      }
+    }
+  },
   methods: {
     getDate (num) {
       const date = new Date(num)
@@ -60,6 +112,12 @@ export default {
       const minute = date.getMinutes().toString().padStart(2, '0')
       const s = date.getSeconds().toString().padStart(2, '0')
       return `${y}-${m}-${d} ${h}:${minute}:${s}`
+    },
+    selectClick (type) {
+      this.selectType = type
+    },
+    onlyClick () {
+      this.onlyContent = !this.onlyContent
     }
   }
 }
@@ -80,15 +138,19 @@ export default {
           border-radius: 2px;
           font-size: 12px;
           color: rgb(77,85,93);
-          &.all {
-            color: #fff;
-            background-color: rgb(0,160,200);
-          }
-          &.positive {
+          &.all, &.positive {
             background-color: rgba(0,160,200,.2);
+            &.active {
+              color: #fff;
+              background-color: rgb(0,160,200);
+            }
           }
           &.negative {
             background-color: rgba(77,85,93,.2);
+            &.active {
+              color: #fff;
+              background-color: #93999f;
+            }
           }
           .count {
             font-size: 8px;
@@ -104,6 +166,9 @@ export default {
           vertical-align: middle;
           font-size: 24px;
           line-height: 24px;
+          &.active {
+            color: rgb(0,160,220);
+          }
         }
         .text {
           font-size: 12px;
@@ -127,6 +192,9 @@ export default {
           .icon {
             color: rgb(147,153,159);
             line-height: 24px;
+            &.on {
+              color: rgb(0,160,220);
+            }
           }
           .text {
             color: rgb(7,17,27);

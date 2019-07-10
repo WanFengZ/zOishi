@@ -32,10 +32,11 @@
       </div>
       <div class="food-ratings border-topbottom">
         <div class="title">商品评价</div>
-        <div class="content">
+        <div class="content"  >
           <ratings :desc="ratingDesc" :ratings="food.ratings"></ratings>
         </div>
       </div>
+      <div class="foot-space" ref="ratings"></div>
     </div>
   </div>
 </template>
@@ -214,6 +215,9 @@ export default {
           font-size: 14px;
           color: rgb(7,17,27);
         }
+      }
+      .foot-space {
+        height: 20px;
       }
     }
   }
