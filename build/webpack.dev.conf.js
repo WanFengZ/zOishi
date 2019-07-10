@@ -15,7 +15,7 @@ const app = express()
 const appData = require('../static/mock/data.json')//加载本地数据文件
 const seller = appData.seller
 const goods = appData.goods
-const rating = appData.ratings
+const ratings = appData.ratings
 let apiRoutes = express.Router()
 app.use('/api', apiRoutes)
 
@@ -68,7 +68,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           data: goods
         })
       })
-      app.get('/api/ratingSelect', (req, res) => {
+      app.get('/api/ratings', (req, res) => {
         res.json({
           errno: 0,
           data: ratings
