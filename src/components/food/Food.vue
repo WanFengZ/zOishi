@@ -49,6 +49,7 @@
                 </div>
               </div>
             </li>
+            <li class="no-rating" v-show="currentRatings.length === 0">该商品无相关评价</li>
           </ul>
         </div>
       </div>
@@ -296,6 +297,12 @@ export default {
                 }
               }
             }
+          }
+          .no-rating {
+            margin-top: 30px;
+            height: 100px;
+            color: rgb(7,17,27);
+            text-align: center;
           }
         }
       }

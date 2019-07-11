@@ -1,10 +1,10 @@
 <template>
-  <div class="ratings">
+  <div class="rating-select">
     <div class="header border-bottom">
       <div class="selects">
-        <div class="selectItem all" :class="{active: selectType === 2}" @click="selectClick(2)">{{desc.all}}<span class="count">22</span></div>
-        <div class="selectItem positive" :class="{active: selectType === 0}" @click="selectClick(0)">{{desc.positive}}<span class="count">22</span></div>
-        <div class="selectItem negative" :class="{active: selectType === 1}" @click="selectClick(1)">{{desc.negative}}<span class="count">22</span></div>
+        <div class="selectItem all" :class="{active: selectType === 2}" @click="selectClick(2)">{{desc.all}}<span class="count">{{allCount}}</span></div>
+        <div class="selectItem positive" :class="{active: selectType === 0}" @click="selectClick(0)">{{desc.positive}}<span class="count">{{positiveCount}}</span></div>
+        <div class="selectItem negative" :class="{active: selectType === 1}" @click="selectClick(1)">{{desc.negative}}<span class="count">{{negativeCount}}</span></div>
       </div>
       <div class="switch border-top">
         <span class="icon iconfont" :class="{active: onlyContent}" @click="onlyClick">&#xe77d;</span>
@@ -29,7 +29,10 @@ export default {
       }
     },
     ratings: {
-      type: Array
+      type: Array,
+      default () {
+        return []
+      }
     }
   },
   data () {
@@ -57,17 +60,15 @@ export default {
     currentRatings () {
       if (this.onlyContent) {
         if (this.selectType === 2) {
-          return this.ratings.filter((rating) => {
-            return rating.text !== ''
-          })
+          return this.contentRatings
         }
         if (this.selectType === 0) {
-          return this.positiveRatings.filter((rating) => {
-            return rating.text !== ''
+          return this.contentRatings.filter((rating) => {
+            return rating.rateType === 1
           })
         }
         if (this.selectType === 1) {
-          return this.negativeRatings.filter((rating) => {
+          return this.contentRatings.filter((rating) => {
             return rating.text !== ''
           })
         }
@@ -81,6 +82,32 @@ export default {
         if (this.selectType === 1) {
           return this.negativeRatings
         }
+      }
+    },
+    allCount () {
+      if (this.onlyContent) {
+        return this.contentRatings.length
+      } else {
+        console.log(this.ratings.length)
+        return this.ratings.length
+      }
+    },
+    positiveCount () {
+      if (this.onlyContent) {
+        return this.contentRatings.filter((rating) => {
+          return rating.rateType === 0
+        }).length
+      } else {
+        return this.positiveRatings.length
+      }
+    },
+    negativeCount () {
+      if (this.onlyContent) {
+        return this.contentRatings.filter((rating) => {
+          return rating.rateType === 1
+        }).length
+      } else {
+        return this.negativeRatings.length
       }
     }
   },
@@ -101,9 +128,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .ratings {
+  .rating-select {
     background-color: #fff;
     .header {
+      background-color: #fff;
       .selects {
         margin: 18px;
         font-size: 0;
