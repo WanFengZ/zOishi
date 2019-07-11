@@ -5,7 +5,7 @@
         <div class="summary-left border-right">
           <span class="score">{{seller.score}}</span>
           <p class="text">综合评分</p>
-          <p class="rank-rate">{{seller.rankRate}}</p>
+          <p class="rank-rate">高于周边商家{{seller.rankRate}}%</p>
         </div>
         <div class="summary-right">
           <div class="score-item">
@@ -159,6 +159,7 @@ export default {
           margin-bottom: 6px;
           font-size: 10px;
           color: rgb(7,17,27);
+          font-weight: 300;
         }
       }
       .summary-right {
