@@ -64,12 +64,12 @@ export default {
         }
         if (this.selectType === 0) {
           return this.contentRatings.filter((rating) => {
-            return rating.rateType === 1
+            return rating.rateType === 0
           })
         }
         if (this.selectType === 1) {
           return this.contentRatings.filter((rating) => {
-            return rating.text !== ''
+            return rating.rateType === 1
           })
         }
       } else {
