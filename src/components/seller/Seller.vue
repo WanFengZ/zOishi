@@ -43,7 +43,7 @@
       </div>
       <div class="seller-img border-topbottom">
         <div class="title">商家实景</div>
-        <div class="img-wrapper" ref="imgWrapper">
+        <div class="img-wrapper" ref="imgWrapper" @click="enterGallery">
           <ul ref="imgUl">
             <li v-for="(img, index) of seller.pics" :key="index" class="img-item">
               <img :src="img" alt="">
@@ -63,17 +63,24 @@
       </div>
       <div class="foot-space"></div>
     </div>
+    <fade-animate>
+      <common-gallery :imgs="seller.pics" v-show="showGallery" @cancel="cancelGallery"></common-gallery>
+    </fade-animate>
   </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
 import CommonStar from '@/components/common/star/Star'
+import CommonGallery from '@/components/common/gallery/Gallery'
+import FadeAnimate from '@/components/common/fadeAnimate/FadeAnimate'
 
 export default {
   name: 'HomeSeller',
   components: {
-    CommonStar
+    CommonStar,
+    CommonGallery,
+    FadeAnimate
   },
   props: {
     seller: {
@@ -85,16 +92,8 @@ export default {
   },
   data () {
     return {
-      typeList: ['decrease', 'discount', 'special', 'invoice', 'guarantee']
-    }
-  },
-  watch: {
-    seller () {
-      this.$nextTick(() => {
-        this.setSellerScroll(this.$refs.seller)
-        this.setUlWidth()
-        this.setImgScroll(this.$refs.imgWrapper)
-      })
+      typeList: ['decrease', 'discount', 'special', 'invoice', 'guarantee'],
+      showGallery: false
     }
   },
   methods: {
@@ -103,14 +102,15 @@ export default {
     },
     setSellerScroll (el) {
       if (!this.sellerScroll) {
-        this.sellerScroll = new BScroll(el, {})
+        this.sellerScroll = new BScroll(el, {
+          click: true
+        })
       } else {
         this.sellerScroll.refresh()
       }
     },
     setImgScroll (el) {
       if (!this.imgScroll) {
-        console.log('hah')
         this.imgScroll = new BScroll(el, {
           scrollX: true,
           scrollY: false
@@ -118,7 +118,19 @@ export default {
       } else {
         this.imgScroll.refresh()
       }
+    },
+    enterGallery () {
+      this.showGallery = true
+    },
+    cancelGallery () {
+      this.showGallery = false
     }
+  },
+  activated () {
+    this.showGallery = false
+    this.setSellerScroll(this.$refs.seller)
+    this.setUlWidth()
+    this.setImgScroll(this.$refs.imgWrapper)
   }
 
 }

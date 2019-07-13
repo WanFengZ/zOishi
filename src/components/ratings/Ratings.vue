@@ -107,7 +107,7 @@ export default {
     }
   },
   created () {
-    axios.get('/api/ratings').then(res => {
+    axios.get('/api/ratings.json').then(res => {
       res = res.data
       if (res.errno === ERR_OK && res.data) {
         this.ratings = res.data

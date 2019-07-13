@@ -56,19 +56,19 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     },
     //配置mock数据
     before (app) {
-      app.get('/api/seller', (req, res) => {
+      app.get('/api/seller.json', (req, res) => {
         res.json({
           errno: 0,
           data: seller
         })
       })
-      app.get('/api/goods', (req, res) => {
+      app.get('/api/goods.json', (req, res) => {
         res.json({
           errno: 0,
           data: goods
         })
       })
-      app.get('/api/ratings', (req, res) => {
+      app.get('/api/ratings.json', (req, res) => {
         res.json({
           errno: 0,
           data: ratings

@@ -32,7 +32,7 @@ export default {
 
   },
   created () {
-    axios.get('/api/seller').then(res => {
+    axios.get('/api/seller.json').then(res => {
       res = res.data
       if (res.errno === ERR_OK && res.data) {
         this.seller = res.data

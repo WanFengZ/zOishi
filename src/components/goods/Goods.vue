@@ -134,7 +134,7 @@ export default {
     }
   },
   created () {
-    axios.get('/api/goods').then(res => {
+    axios.get('/api/goods.json').then(res => {
       res = res.data
       if (res.errno === ERR_OK && res.data) {
         this.goods = res.data

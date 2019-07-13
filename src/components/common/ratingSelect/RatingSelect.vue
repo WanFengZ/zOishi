@@ -88,7 +88,6 @@ export default {
       if (this.onlyContent) {
         return this.contentRatings.length
       } else {
-        console.log(this.ratings.length)
         return this.ratings.length
       }
     },
