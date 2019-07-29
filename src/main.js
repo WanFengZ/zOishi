@@ -7,6 +7,8 @@ import router from './router'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
 
+import 'amfe-flexible'
+
 import 'styles/reset.css'
 import 'styles/border.css'
 import 'styles/iconfont.css'
